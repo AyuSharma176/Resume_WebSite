@@ -109,10 +109,6 @@ Contributions, issues, and feature requests are welcome!
 - GitHub: [@AyuSharma176](https://github.com/AyuSharma176)
 - LinkedIn: [Ayush Sharma](https://www.linkedin.com/in/ayusharma17/)
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ---
 
 ⭐ **Star this repo** if you find it useful!
