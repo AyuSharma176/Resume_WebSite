@@ -17,7 +17,7 @@ const About = () => {
         <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl animate-float" style={{animationDelay: '4s'}}></div>
       </div>
       
-      <div className="max-w-6xl mx-auto px-6 relative z-20">
+      <div className="max-w-6xl mx-auto px-6 relative z-20 pt-20 md:pt-0">
         <div className="animate-fadeInUp">
           {/* Profile Image and Content Grid */}
           <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 items-center mb-8">
@@ -26,7 +26,7 @@ const About = () => {
               {/* Animated gradient border */}
               <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 rounded-full opacity-75 group-hover:opacity-100 blur-lg group-hover:blur-xl transition-all duration-300 animate-pulse"></div>
               {/* Image container */}
-              <div className="relative w-48 h-48 md:w-full md:h-48 rounded-full overflow-hidden border-4 border-slate-800 shadow-2xl group-hover:scale-105 transition-transform duration-300">
+              <div className="relative w-48 h-48 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-slate-800 shadow-2xl group-hover:scale-105 transition-transform duration-300">
                 <img 
                   src="/profile.png" 
                   alt="Ayush Sharma" 
@@ -36,8 +36,8 @@ const About = () => {
             </div>
 
             {/* Content */}
-            <div>
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 leading-tight">
+            <div className="text-center md:text-left">
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 leading-tight">
                 Hi, I'm{' '}
                 <span className="relative inline-block">
                   <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_200%]">
@@ -46,7 +46,7 @@ const About = () => {
                   <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 rounded-full"></span>
                 </span>
               </h2>
-              <p className="text-2xl md:text-3xl text-cyan-300 font-bold flex items-center gap-3">
+              <p className="text-xl md:text-3xl text-cyan-300 font-bold flex items-center justify-center md:justify-start gap-3">
                 <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
                 B.Tech Computer Science Engineering Student
               </p>

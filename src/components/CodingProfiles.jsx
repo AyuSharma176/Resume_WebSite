@@ -234,7 +234,7 @@ const CodingProfiles = () => {
   }
 
   return (
-    <section id="coding-profiles" className="py-20 bg-slate-900">
+    <section id="competitiveprogramming" className="py-20 bg-slate-900">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-16 relative inline-block">
           Competitive Programming
