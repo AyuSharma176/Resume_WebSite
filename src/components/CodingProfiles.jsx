@@ -19,7 +19,7 @@ const CodingProfiles = () => {
     const fetchLeetcodeData = async () => {
       try {
         // Cache version - increment this to force refresh for all users
-        const CACHE_VERSION = '3'
+        const CACHE_VERSION = '5'
         const cachedVersion = localStorage.getItem('leetcode_cache_version')
         
         // Clear old cache if version changed OR if cached data has 0 problems
@@ -66,7 +66,10 @@ const CodingProfiles = () => {
               easySolved: data.easySolved || 0,
               mediumSolved: data.mediumSolved || 0,
               hardSolved: data.hardSolved || 0,
-              ranking: data.ranking || 0
+              ranking: data.ranking || 0,
+              contestRating: data.contestRating || 0,
+              contestAttend: data.contestAttend || 0,
+              contestGlobalRanking: data.contestGlobalRanking || 0
             })
           },
           {
@@ -76,13 +79,17 @@ const CodingProfiles = () => {
               easySolved: data.easySolved || 0,
               mediumSolved: data.mediumSolved || 0,
               hardSolved: data.hardSolved || 0,
-              ranking: data.ranking || 0
+              ranking: data.ranking || 0,
+              contestRating: data.contestRating || 0,
+              contestAttend: data.contestAttend || 0,
+              contestGlobalRanking: data.contestGlobalRanking || 0
             })
           }
         ]
 
         let fetchSuccess = false
         let lastError = null
+        let mainData = null
         
         for (const endpoint of endpoints) {
           try {
@@ -107,12 +114,7 @@ const CodingProfiles = () => {
               
               // Validate the data - totalSolved should be a positive number
               if (transformedData.totalSolved > 0 && !isCancelled) {
-                setLeetcodeData(transformedData)
-                
-                // Cache the successful result for 1 hour
-                localStorage.setItem('leetcode_data', JSON.stringify(transformedData))
-                localStorage.setItem('leetcode_cache_time', Date.now().toString())
-                console.log('✅ Fetched from alfa-leetcode-api:', transformedData.totalSolved, 'problems solved')
+                mainData = transformedData
                 fetchSuccess = true
                 break
               } else if (transformedData.totalSolved === 0) {
@@ -127,6 +129,39 @@ const CodingProfiles = () => {
             console.log('❌ Failed endpoint:', endpoint.url, err.message)
             lastError = err
             continue
+          }
+        }
+        
+        // If we got the main data, try to fetch contest data separately
+        if (fetchSuccess && mainData) {
+          try {
+            console.log('🏆 Fetching contest data...')
+            const contestResponse = await fetch(
+              `https://alfa-leetcode-api.onrender.com/${LEETCODE_USERNAME}/contest`
+            )
+            
+            if (contestResponse.ok) {
+              const contestData = await contestResponse.json()
+              console.log('📦 Contest API response:', contestData)
+              
+              // Merge contest data with main data
+              mainData.contestRating = contestData.contestRating || 0
+              mainData.contestAttend = contestData.contestAttend || 0
+              mainData.contestGlobalRanking = contestData.contestGlobalRanking || 0
+              console.log('✅ Contest data merged:', mainData)
+            }
+          } catch (err) {
+            console.log('⚠️ Contest data fetch failed (continuing with main data):', err.message)
+          }
+          
+          // Save the data
+          if (!isCancelled) {
+            setLeetcodeData(mainData)
+            
+            // Cache the successful result for 1 hour
+            localStorage.setItem('leetcode_data', JSON.stringify(mainData))
+            localStorage.setItem('leetcode_cache_time', Date.now().toString())
+            console.log('✅ Fetched from alfa-leetcode-api:', mainData.totalSolved, 'problems solved')
           }
         }
         
@@ -268,6 +303,22 @@ const CodingProfiles = () => {
                     <p className="text-xl font-bold text-purple-400">
                       #{leetcodeData.ranking.toLocaleString()}
                     </p>
+                  </div>
+                )}
+                {leetcodeData.contestRating > 0 && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-slate-700/30 p-4 rounded-lg">
+                      <p className="text-slate-400 text-sm mb-1">Contest Rating</p>
+                      <p className="text-xl font-bold text-orange-400">
+                        {Math.round(leetcodeData.contestRating)}
+                      </p>
+                    </div>
+                    <div className="bg-slate-700/30 p-4 rounded-lg">
+                      <p className="text-slate-400 text-sm mb-1">Contests</p>
+                      <p className="text-xl font-bold text-blue-400">
+                        {leetcodeData.contestAttend || 0}
+                      </p>
+                    </div>
                   </div>
                 )}
                 <a
